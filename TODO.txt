@@ -1,0 +1,14 @@
+actions
+  check installations
+  select music dir
+  restart session (in case of error or slow)
+  update music list
+  download music
+  direct input
+  uninstall
+    (not sure I dare)
+
+keep track of hypothetical state
+  offer "st went wrong" btn
+
+~/.termux/termux.properties vs ~/.config/termux/termux.properties ???
