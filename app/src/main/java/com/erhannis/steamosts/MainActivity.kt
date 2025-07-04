@@ -1,6 +1,7 @@
 package com.erhannis.steamosts
 
 import android.app.PendingIntent
+import android.content.ClipDescription
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -12,6 +13,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -23,10 +26,42 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.lifecycleScope
 import com.erhannis.steamosts.TermuxConstants.TERMUX_APP.RUN_COMMAND_SERVICE
 import com.erhannis.steamosts.ui.theme.SteamOSTsTheme
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 
+class Command {
+    var tmuxCommand: Boolean
+    var description: String
+    var command: String
+
+    constructor(tmuxCommand: Boolean, description: String, command: String) {
+        this.tmuxCommand = tmuxCommand
+        this.description = description
+        this.command = command
+    }
+}
+
+val commands: Array<Command> = arrayOf(
+    Command(
+        tmuxCommand = false,
+        description = "Download FEXDroid install script",
+        command = "curl -o install https://raw.githubusercontent.com/Erhannis/FEXDroid/refs/heads/fork/target_erhannis/install",
+    ),
+    Command(
+        tmuxCommand = false,
+        description = "Run FEXDroid install script",
+        command = "chmod +x install && bash install",
+    ),
+)
 
 class MainActivity : ComponentActivity() {
     companion object {
@@ -46,92 +81,74 @@ class MainActivity : ComponentActivity() {
 
         requestPermissions(arrayOf(TermuxConstants.PERMISSION_RUN_COMMAND), 0)
 
+        lifecycleScope.launch {
+            while (isActive) {
+                cmd("/data/data/com.termux/files/usr/bin/bash", arrayOf("y_read.sh"), isReadRequest = true)
+                delay(500)
+            }
+        }
+
         setContent {
             val remoteText by MainActivity.remoteText
             var localText by remember { mutableStateOf("") }
+            val focusManager = LocalFocusManager.current
             SteamOSTsTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    Column() {
-                        Greeting("Android")
-                        Button(onClick = {
-                            do_pwd()
-                        }) {
-                            Text(text = "pwd")
+                    Column {
+                        Row {
+                            Button(onClick = {
+                                cmd("/data/data/com.termux/files/usr/bin/bash", arrayOf("-c", "curl -o install https://raw.githubusercontent.com/Erhannis/FEXDroid/refs/heads/fork/target_erhannis/install"))
+                            }) {
+                                Text(text = "download install")
+                            }
+                            Button(onClick = {
+                                cmd("/data/data/com.termux/files/usr/bin/bash", arrayOf("-c", "chmod +x install && bash install"))
+                            }) {
+                                Text(text = "run install")
+                            }
+                            Button(onClick = {
+                                cmd("/data/data/com.termux/files/usr/bin/bash", arrayOf("-c", """mkfifo pipe0 ; mkfifo pipe1 ; mkfifo pipe2 ; touch y_read.sh ; chmod +x y_read.sh ; echo ${'$'}'#!/bin/bash\n\nSESSION_NAME="x_session"\nLINES_TO_READ=16\n\ntmux capture-pane -p -S -${'$'}LINES_TO_READ -t "${'$'}SESSION_NAME"' > y_read.sh ; touch y_write.sh ; chmod +x y_write.sh ; echo ${'$'}'#!/bin/bash\n\nSESSION_NAME="x_session"\nINPUT="${'$'}1"\n\ntmux send-keys -t "${'$'}SESSION_NAME" "${'$'}INPUT" Enter' > y_write.sh ; touch z.sh ; chmod +x z.sh ; echo ${'$'}'#!/bin/bash\n\nSESSION_NAME="x_session"\n\ntmux new-session -d -y 15 -s "${'$'}SESSION_NAME" "bash"' > z.sh"""))
+                            }) {
+                                Text(text = "make scripts")
+                            }
                         }
-                        Button(onClick = {
-                            do_ls()
-                        }) {
-                            Text(text = "ls")
-                        }
-                        Button(onClick = {
-                            do_top()
-                        }) {
-                            Text(text = "top")
-                        }
-                        Button(onClick = {
-                            cmd("/data/data/com.termux/files/usr/bin/bash", arrayOf("-c", "curl -o install https://raw.githubusercontent.com/Erhannis/FEXDroid/main/install"))
-                        }) {
-                            Text(text = "download install")
-                        }
-                        Button(onClick = {
-                            cmd("/data/data/com.termux/files/usr/bin/bash", arrayOf("-c", "chmod +x install && bash install"))
-                        }) {
-                            Text(text = "run install")
-                        }
-                        Button(onClick = {
-                            cmd("/data/data/com.termux/files/usr/bin/bash", arrayOf("-c", "mkfifo pipe0 ; mkfifo pipe1 ; mkfifo pipe2"))
-                        }) {
-                            Text(text = "make pipes")
-                        }
-                        Button(onClick = {
-                            cmd("/data/data/com.termux/files/usr/bin/bash", arrayOf("-c", """touch y_read.sh && chmod +x y_read.sh && echo ${'$'}'#!/bin/bash\n\nSESSION_NAME="x_session"\nLINES_TO_READ=100\n\ntmux capture-pane -p -S -${'$'}LINES_TO_READ -t "${'$'}SESSION_NAME"' > y_read.sh"""))
-                        }) {
-                            Text(text = "create y_read.sh")
-                        }
-                        Button(onClick = {
-                            cmd("/data/data/com.termux/files/usr/bin/bash", arrayOf("-c", """touch y_write.sh && chmod +x y_write.sh && echo ${'$'}'#!/bin/bash\n\nSESSION_NAME="x_session"\nINPUT="${'$'}1"\n\ntmux send-keys -t "${'$'}SESSION_NAME" "${'$'}INPUT" Enter' > y_write.sh"""))
-                        }) {
-                            Text(text = "create y_write.sh")
-                        }
-                        Button(onClick = {
-                            cmd("/data/data/com.termux/files/usr/bin/bash", arrayOf("-c", """touch z.sh && chmod +x z.sh && echo ${'$'}'#!/bin/bash\n\nSESSION_NAME="x_session"\n\ntmux new-session -d -s "${'$'}SESSION_NAME" "bash"' > z.sh"""))
-                        }) {
-                            Text(text = "create z.sh")
-                        }
-                        Button(onClick = {
-                            cmd("/data/data/com.termux/files/usr/bin/bash", arrayOf("z.sh"))
-                        }) {
-                            Text(text = "start bash")
+                        Row {
+                            Button(onClick = {
+                                cmd("/data/data/com.termux/files/usr/bin/bash", arrayOf("z.sh"))
+                            }) {
+                                Text(text = "start bash")
+                            }
+                            Button(onClick = {
+                                cmd("/data/data/com.termux/files/usr/bin/bash", arrayOf("tmux kill-session -t x_session"))
+                            }) {
+                                Text(text = "kill bash")
+                            }
                         }
                         Button(onClick = {
                             cmd("/data/data/com.termux/files/usr/bin/bash", arrayOf("y_read.sh"), isReadRequest = true)
                         }) {
                             Text(text = "y_read")
                         }
-                        Button(onClick = {
-                            var hex: String = "pwd"
-                                .map { c ->
-                                    String.format("\\x%02X", c.code)
-                                }
-                                .joinToString("")
-                            cmd("/data/data/com.termux/files/usr/bin/bash", arrayOf("-c", """bash y_write.sh ${'$'}'""" + hex + "'"))
-                        }) {
-                            Text(text = "y_write")
-                        }
                         Row {
                             BasicTextField(
                                 value = localText,
                                 onValueChange = { localText = it },
-
+                                textStyle = TextStyle(color = MaterialTheme.colorScheme.onBackground),
+                                keyboardOptions = KeyboardOptions.Default.copy(
+                                    imeAction = ImeAction.Done // or Search, Go, etc.
+                                ),
+                                keyboardActions = KeyboardActions(
+                                    onDone = {
+                                        y_write(localText)
+                                        localText = ""
+                                        // focusManager.clearFocus() // optionally dismiss the keyboard
+                                    }
+                                ),
                             )
                             Button(onClick = {
-                                var hex: String = localText
-                                    .map { c ->
-                                        String.format("\\x%02X", c.code)
-                                    }
-                                    .joinToString("")
-                                cmd("/data/data/com.termux/files/usr/bin/bash", arrayOf("-c", """bash y_write.sh ${'$'}'""" + hex + "'"))
+                                y_write(localText)
+                                localText = ""
                             }) {
                                 Text(text = "==>")
                             }
@@ -143,16 +160,13 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    fun do_top() {
-        cmd("/data/data/com.termux/files/usr/bin/top", arrayOf("-n", "10"))
-    }
-
-    fun do_ls() {
-        cmd("/data/data/com.termux/files/usr/bin/ls", arrayOf())
-    }
-
-    fun do_pwd() {
-        cmd("/data/data/com.termux/files/usr/bin/pwd", arrayOf())
+    fun y_write(cmd: String) {
+        var hex: String = cmd
+            .map { c ->
+                String.format("\\x%02X", c.code)
+            }
+            .joinToString("")
+        cmd("/data/data/com.termux/files/usr/bin/bash", arrayOf("-c", """bash y_write.sh ${'$'}'""" + hex + "'"))
     }
 
     fun cmd(path: String, args: Array<String>, stdin: String = "", isReadRequest: Boolean = false) {

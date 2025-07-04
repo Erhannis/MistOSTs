@@ -9,6 +9,8 @@ In Termux, install FEXDroid, which lets you run x86/64 code.
 In FEXDroid, install linux SteamCMD, the official Steam command line client.
   https://developer.valvesoftware.com/wiki/SteamCMD
 Login to Steam via SteamCMD (and confirm login via the Steam app).
+  Warning: we're doing a lot of this via tmux, which means any other program on the phone that has termux permissions could (theoretically) send commands to our running session and steal your steam credentials or something.
+  It probably WON'T happen, but it MIGHT.
 Have SteamCMD list music packages.
 Have SteamCMD download the ones you want.
 
