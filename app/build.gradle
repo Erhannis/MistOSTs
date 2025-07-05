@@ -66,4 +66,5 @@ dependencies {
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
 
 //    implementation 'com.github.termux.termux-app:termux-shared:v0.118.3' // Dunno what gradle is smoking, no variations of this have worked
+//    implementation("androidx.datastore:datastore-preferences:1.1.7")
 }
