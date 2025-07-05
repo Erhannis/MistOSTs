@@ -1,4 +1,4 @@
-package com.erhannis.steamosts.ui.theme
+package com.erhannis.mistosts.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

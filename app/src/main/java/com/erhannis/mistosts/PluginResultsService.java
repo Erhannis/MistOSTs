@@ -1,4 +1,4 @@
-package com.erhannis.steamosts;
+package com.erhannis.mistosts;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -7,7 +7,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import com.erhannis.steamosts.TermuxConstants.TERMUX_APP.TERMUX_SERVICE;
+import com.erhannis.mistosts.TermuxConstants.TERMUX_APP.TERMUX_SERVICE;
 
 public class PluginResultsService extends IntentService {
 

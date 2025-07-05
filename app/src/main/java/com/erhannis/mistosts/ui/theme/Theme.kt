@@ -1,4 +1,4 @@
-package com.erhannis.steamosts.ui.theme
+package com.erhannis.mistosts.ui.theme
 
 import android.app.Activity
 import android.os.Build
@@ -38,7 +38,7 @@ private val LightColorScheme = lightColorScheme(
 )
 
 @Composable
-fun SteamOSTsTheme(
+fun MistOSTsTheme(
         darkTheme: Boolean = isSystemInDarkTheme(),
         // Dynamic color is available on Android 12+
         dynamicColor: Boolean = true,

@@ -1,4 +1,4 @@
-package com.erhannis.steamosts
+package com.erhannis.mistosts
 
 import android.app.PendingIntent
 import android.content.ClipDescription
@@ -52,8 +52,8 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
-import com.erhannis.steamosts.TermuxConstants.TERMUX_APP.RUN_COMMAND_SERVICE
-import com.erhannis.steamosts.ui.theme.SteamOSTsTheme
+import com.erhannis.mistosts.TermuxConstants.TERMUX_APP.RUN_COMMAND_SERVICE
+import com.erhannis.mistosts.ui.theme.MistOSTsTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -72,7 +72,7 @@ val introCommands: Array<Command> = arrayOf(
     ),
     Command(
         tmuxCommand = false,
-        description = "Warning 1: Your Steam credentials will be sent to a tmux session running in Termux.  SteamOSTs, Termux, and any program with the com.termux.permission.RUN_COMMAND permission or similar capability could theoretically steal your Steam credentials.  I don't think this will happen, but be aware.  For my part I promise not to steal your Steam credentials, but understand that if you want to be sure I'm not doing that (or anything else illicit with Termux), you'll have to examine and compile the source code yourself.",
+        description = "Warning 1: Your Steam credentials will be sent to a tmux session running in Termux.  MistOSTs, Termux, and any program with the com.termux.permission.RUN_COMMAND permission or similar capability could theoretically steal your Steam credentials.  I don't think this will happen, but be aware.  For my part I promise not to steal your Steam credentials, but understand that if you want to be sure I'm not doing that (or anything else illicit with Termux), you'll have to examine and compile the source code yourself.",
         command = "",
     ),
     Command(
@@ -87,7 +87,7 @@ val introCommands: Array<Command> = arrayOf(
     ),
     Command(
         tmuxCommand = false,
-        description = "The source code for the app can be found at https://github.com/Erhannis/SteamOSTs , and the scripts can be found at https://github.com/Erhannis/FEXDroid/tree/fork/steamosts .",
+        description = "The source code for the app can be found at https://github.com/Erhannis/MistOSTs , and the scripts can be found at https://github.com/Erhannis/FEXDroid/tree/fork/mistosts .",
         command = "",
     ),
     Command(
@@ -102,7 +102,7 @@ val introCommands: Array<Command> = arrayOf(
     ),
     Command(
         tmuxCommand = false,
-        description = "Understand that the only response SteamOSTs parses is the soundtrack IDs and names - everything else, you're the one that decides when a command has failed, and how to fix it.  Good luck.",
+        description = "Understand that the only response MistOSTs parses is the soundtrack IDs and names - everything else, you're the one that decides when a command has failed, and how to fix it.  Good luck.",
         command = "",
     ),
     Command(
@@ -122,7 +122,7 @@ val introCommands: Array<Command> = arrayOf(
     ),
     Command(
         tmuxCommand = false,
-        description = "Step 3: nano .termux/termux.properties\nUncomment \"allow-external-apps = true\" to permit other apps (like SteamOSTs) to request/use permissions to have Termux run commands.\n\nctrl-o to save, ctrl-x to exit nano.",
+        description = "Step 3: nano .termux/termux.properties\nUncomment \"allow-external-apps = true\" to permit other apps (like MistOSTs) to request/use permissions to have Termux run commands.\n\nctrl-o to save, ctrl-x to exit nano.",
         command = "",
     ),
     Command(
@@ -132,7 +132,7 @@ val introCommands: Array<Command> = arrayOf(
     ),
     Command(
         tmuxCommand = false,
-        description = "Step 5: Grant SteamOSTs the \"Run commands in Termux environment\" permission.",
+        description = "Step 5: Grant MistOSTs the \"Run commands in Termux environment\" permission.",
         command = "",
     ),
     Command(
@@ -151,7 +151,7 @@ val setupCommands: Array<Command> = arrayOf(
     Command(
         tmuxCommand = false,
         description = "Download and run preinstall script; then please wait for maybe 30 seconds.  (Click \"Run\" now.)",
-        command = "curl -o preinstall.sh https://raw.githubusercontent.com/Erhannis/FEXDroid/refs/heads/fork/steamosts/preinstall.sh && chmod +x preinstall.sh && bash preinstall.sh",
+        command = "curl -o preinstall.sh https://raw.githubusercontent.com/Erhannis/FEXDroid/refs/heads/fork/mistosts/preinstall.sh && chmod +x preinstall.sh && bash preinstall.sh",
     ),
     Command( // Recurring
         tmuxCommand = false,
@@ -234,7 +234,7 @@ val mainCommands: Array<Command> = arrayOf(
     ),
     Command( // Recurring
         tmuxCommand = false,
-        description = "Wait until the soundtrack list has been retrieved, then go to the OSTs tab and click GET on one you want to download.  If it seems like they're not all there, check \"Long read\" for a second so SteamOSTs definitely sees the whole log with all the soundtracks listed, to parse them out.",
+        description = "Wait until the soundtrack list has been retrieved, then go to the OSTs tab and click GET on one you want to download.  If it seems like they're not all there, check \"Long read\" for a second so MistOSTs definitely sees the whole log with all the soundtracks listed, to parse them out.",
         command = "",
     ),
     Command( // Recurring
@@ -334,7 +334,7 @@ class MainActivity : ComponentActivity() {
                 3 -> remember { mutableStateOf(0) }
                 else -> remember { mutableStateOf(0) }
             }
-            SteamOSTsTheme {
+            MistOSTsTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     Column {
@@ -609,7 +609,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    SteamOSTsTheme {
+    MistOSTsTheme {
         Greeting("Android")
     }
 }

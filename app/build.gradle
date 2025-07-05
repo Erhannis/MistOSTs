@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.erhannis.steamosts'
+    namespace 'com.erhannis.mistosts'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.erhannis.steamosts"
+        applicationId "com.erhannis.mistosts"
         minSdk 24
         targetSdk 33
         versionCode 1

@@ -1,4 +1,4 @@
-package com.erhannis.steamosts
+package com.erhannis.mistosts
 
 import org.junit.Test
 

@@ -20,14 +20,14 @@ Install Termux from F-Droid
   search termux
 Open termux
   nano .termux/termux.properties
-  uncomment "allow-external-apps = true" to permit other apps (like SteamOSTs) to request/use permissions to have Termux run commands
+  uncomment "allow-external-apps = true" to permit other apps (like MistOSTs) to request/use permissions to have Termux run commands
 Grant termux "display over other apps" permission (possibly optional)
 Grant termux files permissions etc, probably
 Disable battery optimizations for Termux
   https://dontkillmyapp.com/
 
 Notes:
-You can close SteamOSTs without affecting the running scripts; those run in the background via Termux.  (Kill Termux if you need to kill the scripts.  Delete Termux's data if you need to delete the scripts' data.)
+You can close MistOSTs without affecting the running scripts; those run in the background via Termux.  (Kill Termux if you need to kill the scripts.  Delete Termux's data if you need to delete the scripts' data.)
 
 Released MIT license.  Termux, FEXDroid, FEX-Emu, Ubuntu, SteamCMD, Steam, and whatever you download are property of their respective owners, and I am not affiliated with any of the properties named.
 -Erhannis
