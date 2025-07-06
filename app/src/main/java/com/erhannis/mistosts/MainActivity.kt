@@ -87,7 +87,7 @@ val introCommands: Array<Command> = arrayOf(
     ),
     Command(
         tmuxCommand = false,
-        description = "The source code for the app can be found at https://github.com/Erhannis/MistOSTs , and the scripts can be found at https://github.com/Erhannis/FEXDroid/tree/fork/mistosts .",
+        description = "The source code for the app can be found at https://github.com/Erhannis/MistOSTs , and the scripts can be found at https://github.com/Erhannis/FEXDroid/tree/fork/mistosts .  It was based off the process at https://gist.github.com/Cyang39/917f59062fc9d57302d94e3fc534fb16 .",
         command = "",
     ),
     Command(
