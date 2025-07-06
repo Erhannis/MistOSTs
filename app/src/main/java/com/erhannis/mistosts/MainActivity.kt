@@ -243,7 +243,7 @@ val mainCommands: Array<Command> = arrayOf(
         command = "tmux kill-session -t x_session",
     ),
     Command( // Recurring
-        tmuxCommand = false,
+        tmuxCommand = true,
         description = "The `exit` command works for most shells and consoles.",
         command = "exit",
     ),
